@@ -9,6 +9,7 @@
   "author": "Ajay",
   "license": "ISC",
   "dependencies": {
+    "cheerio-httpcli": "^0.8.3",
     "cookie-parser": "^1.4.6",
     "express": "^4.17.1",
     "express-validator": "^6.14.0",
