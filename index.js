@@ -1,6 +1,12 @@
 const express = require("express");
 const socket = require("socket.io");
 const app = express();
+//추가한 부분
+const connect = require("./schemas/index");
+connect();
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const mainRouter = require("./routes/main");
 
 //Starts the server
 
@@ -9,10 +15,22 @@ let server = app.listen(4000, function () {
 });
 
 app.use(express.static("public"));
+app.use(cors({ credentials: true }));
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.urlencoded({ extended: false }));
 
 //Upgrades the server to accept websockets.
 
-let io = socket(server);
+let io = socket(server, {
+  cors : {
+      origin:"*", //여기에 명시된 서버만 호스트만 내서버로 연결을 허용할거야
+      methods: ["GET","POST"],
+  },
+})
+
+//라우터 연결
+app.use("/main", [mainRouter]);
 
 //Triggered when a client is connected.
 
