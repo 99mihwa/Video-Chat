@@ -36,6 +36,7 @@ app.use("/main", [mainRouter]);
 
 io.on("connection", function (socket) {
   console.log("User Connected :" + socket.id);
+  console.log("User Connected :" + socket.id);
 
   //Triggered when a peer hits the join room button.
 
