@@ -1,12 +1,17 @@
 const express = require("express");
 const socket = require("socket.io");
 const app = express();
+
 //추가한 부분
 const connect = require("./schemas/index");
 connect();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const mainRouter = require("./routes/main");
+const Logins = require("../schemas/logins"); //logins DB 연결하기
+const moment = require('moment'); 
+require('moment-timezone');
+moment.tz.setDefault("Asia/Seoul");
 
 //Starts the server
 
@@ -34,9 +39,11 @@ app.use("/main", [mainRouter]);
 
 //Triggered when a client is connected.
 
+
+
 io.on("connection", function (socket) {
-  console.log("User Connected :" + socket.id);
-  console.log("User Connected :" + socket.id);
+  console.log("인덱스 User Connected :" + socket.id);
+
 
   //Triggered when a peer hits the join room button.
 
@@ -83,3 +90,13 @@ io.on("connection", function (socket) {
     socket.broadcast.to(roomName).emit("answer", answer); //Sends Answer to the other peer in the room.
   });
 });
+
+   // 유저 접속 정보 DB저장
+   const connectedAt = moment().format('YYYY-MM-DD HH:mm:ss');
+   const connectUserId = user.userId
+   const socketId = socket.id
+   await Logins.create({
+     connectUserId,
+     connectedAt,
+     socketId
+   });

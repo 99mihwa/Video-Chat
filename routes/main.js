@@ -3,9 +3,14 @@ const router = express.Router();
 const { body, validationResult } = require("express-validator"); // 회원가입 정보 필터링 라이브러리
 const Users = require("../schemas/users"); //Users DB 연결하기
 const jwt = require("jsonwebtoken");
-
 const fs = require("fs");
 const myKey = fs.readFileSync(__dirname + "/key.txt").toString(); // 토큰 시크릿 키값 불러오기
+const Logins = require("../schemas/logins"); //logins DB 연결하기
+const moment = require('moment'); 
+require('moment-timezone');
+moment.tz.setDefault("Asia/Seoul");
+const socket = require("socket.io");
+
 
 // 회원가입
 router.post(
@@ -98,12 +103,22 @@ router.post(
       return;
     }
 
-    // 토큰 발급단계 (위치정보와 Id담기)
-    /// 위치정보 DB에서 조회
+   // 유저 접속 정보 DB저장
+  //  //const connectedAt = moment().format('YYYY-MM-DD HH:mm:ss');
+  //  //const connectUserId = user.userId
+  //  //const socketId = socket.id
+  //  //const await Logins.create({
+  //    //connectUserId,
+  //    //connectedAt,
+  //    //socketId
+  //  //});
+
+
+    // 토큰 발급단계 (Id와 닉네임 담기)
     const userInfo = await Users.findOne({ userId });
     const { userNickname } = userInfo;
 
-    /// payload에 userId, userGu, userDong 담기
+    /// payload에 userId, userNickname 담기
     const payload = { userId, userNickname };
     const secret = myKey;
     const options = {
@@ -116,5 +131,6 @@ router.post(
     res.status(200).json({ token: token, msg: "로그인이 완료 되었습니다." });
   }
 );
+
 
 module.exports = router;
