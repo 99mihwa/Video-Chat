@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const LoginsSchema = mongoose.Schema({
   // Logins
-  connectUserId: {
+  userId: {
     type: String,
     required: true,
   },
