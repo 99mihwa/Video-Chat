@@ -3,12 +3,9 @@ let divVideoChatLobby = document.getElementById("video-chat-lobby");
 let divVideoChat = document.getElementById("video-chat-room");
 let joinButton = document.getElementById("join");
 let roomInput = document.getElementById("roomName");
-let idInput = document.getElementById("userId");
-let loginButton = document.getElementById("login");
 let userVideo = document.getElementById("user-video");
 let peerVideo = document.getElementById("peer-video");
 let roomName;
-let userId;
 let creator = false;
 let rtcPeerConnection;
 let userStream;
@@ -26,21 +23,10 @@ joinButton.addEventListener("click", function () {
     alert("Please enter a room name");
   } else {
     roomName = roomInput.value;
-    console.log("룸네임은!!!!!!!!!!!!!",roomName)
     socket.emit("join", roomName);
   }
 });
 
-       // 로그인 버튼 클릭
-loginButton.addEventListener("click", function() {
-  if (idInput.value == "") {
-    alert("Please enter a id");
-        }	else {
-        userId = idInput.value;
-        console.log("유저아이디!!!!!!!!!!!!!",userId)
-        socket.emit("login",userId);
-      }
-      });
 
 // Triggered when a room is succesfully created.
 
